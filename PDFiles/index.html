@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.80" />
+    <meta name="HandheldFriendly" content="true" />
+    <link rel="icon" type="image/png" href="moovah.png" style="width:10px;height:10px" />
+    <title>Moovah!</title>
+    <style type="text/css">
+        .styleLable {
+            font-size: 22px;
+        }
+
+        .stylebutton {
+            color: #FE5200;
+            text-decoration: none;
+            background-color: #FFEEF9;
+            display: block;
+            line-height: 40px;
+            height: 40px;
+            border-radius: 10px;
+            /*width: 200px;*/
+            font-family: Calibri;
+            font-weight: bold;
+        }
+
+        .styleContinue {
+            color: #ACACAC;
+            padding-top: 20px;
+        }
+    </style>
+    <script type="text/javascript">
+
+        function InstallApp() {
+            //cokkei variable for storing if app is installed.
+            //debugger;
+            //alert(5);
+            document.cookie = "IsAppInstalled=true";
+            //window.location.href = 'Home.htm';
+            //alert(5);
+            //document.location.href = '/Home.htm';
+            var platform = navigator.platform.toLowerCase();
+            var download = document.getElementById("btndownload");
+            //alert(platform);
+
+
+
+            if (platform == 'blackberry') {
+                download.setAttribute("href", "Apps/blackberry/Moovah_BB.jad");
+            }
+            else {
+
+                download.setAttribute("href", "Apps/Android/moovah.apk");
+
+            }
+
+        }
+
+
+
+    </script>
+
+</head>
+<body style="text-align: center; background-color: #1E1E1E;margin:0" onload="InstallApp();">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center">
+                <table width="450px" style="text-align: center; background-color: #FE5200;min-height:643px">
+                    <tr>
+                        <td align="center">
+                            <table border="0" cellpadding="0" cellspacing="20">
+                                <tr>
+                                    <td align="center" valign="top" style="padding-top:25px;padding-bottom:20px">
+                                        <img src="logo.png" alt="Khooloo" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="font-family:Calibri;font-size:17px;color:white;padding-bottom:10px;line-height:18px">
+                                        Get free Wi-Fi. <br />
+                                        Get the best music, deals, discounts and more.<br />
+                                        No hassle. No hustle.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-bottom: 10px">
+                                        <div style="float: left;  height: 75px; width:40% ">
+                                            <img src="android_icon.png" alt="" width="63" height="75" />
+                                        </div>
+                                        <div style="float: left; height: 75px; text-align: center; width:15% ">
+                                            <img src="plus_icon.png" alt="" width="21" height="22" style="position: relative; top: 27px" />
+                                        </div>
+                                        <div style=" width: auto; text-align: right; float: right; height: 75px; top: 10px; width: 40%; ">
+                                            <img src="bb_white_icon.png" alt="" width="80" height="51" style="position:relative;top:11px" />
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" style="font-size: 18px;">
+                                        <a id="btndownload" class="stylebutton">DOWNLOAD APP</a>
+                                    </td>
+                                </tr>
+                                <!--<tr>
+                                    <td align="center" style="font-size: 18px;">
+                                        <a id="btndownload" href="Apps/Blackberry/Moovah_BB.jad" class="stylebutton">Download Blackberry App</a>
+                                    </td>
+                                </tr>-->
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
