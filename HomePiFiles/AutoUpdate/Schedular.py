@@ -130,7 +130,7 @@ def StartSchedular():
         LocalPath = '/var/run/SchedularDaemon/'
         PidFile = LocalPath +'SchedularDaemon.pid'
         ObjDaemon = MyDaemon(PidFile)
-        ObjDaemon.start()
+        ObjDaemon.restart()
     except Exception,e:
         MoovahLogger.logger.error("StartSchedular :"+str(e))
 

@@ -122,8 +122,6 @@ def main():
         #if DataUsed > 0:
         response = urllib2.urlopen(req,data)
         js = json.load(response)
-	print("MyResponse:%s:"+str(js))
-	print "done"
         #print response
         if js['StatusCode'] == 200:
             with open("/etc/squid3/whitelist", "w+") as myfile:
@@ -142,9 +140,9 @@ def main():
 
             print "RESET:" + str(IPList)
             getDataUsageByIPs.resetDataUsageOfIPs(IPList)
-	    getDataUsageByIPs.runWhiteList()
-        lFile = open(logFilePath, "w+")
-        lFile.close()
+            getDataUsageByIPs.runWhiteList()
+            lFile = open(logFilePath, "w+")
+            lFile.close()
         print js
 
     except Exception, e:
