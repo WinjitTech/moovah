@@ -38,7 +38,7 @@ def PostJsonDataToURL(url,postdata):
         print str(e)
 
 
-def PostDeviceReportZipTOCMS():
+def PostDeviceReportZipToCMS():
     try:
 
         databaseFilePath = ConfReader.GetValue(ConfReader.strDBFilePathKey)#'/home/pi/pythonlogger.py/data.db'
@@ -57,15 +57,77 @@ def PostDeviceReportZipTOCMS():
         print url
 
         GetFileInfo.GenerateDeviceReportZip()
-        b64ary = FileTOBase64ByteArray("/media/usb0/moovah/dignostics.tar.gz")
+        b64ary = FileTOBase64ByteArray("/home/pi/dignostics.tar.gz")
 
         postdata ={ "ZipBase64String": b64ary,"Timestamp": time.time(),"UploadArea": 3 }
 
-        print postdata
+        #print postdata
 
         PostJsonDataToURL(url,postdata)
 
     except Exception,e:
         print str(e)
 
-PostDeviceReportZipTOCMS()
+
+def PostDailyDeviceBackupZipToCMS():
+    try:
+
+        databaseFilePath = ConfReader.GetValue(ConfReader.strDBFilePathKey)#'/home/pi/pythonlogger.py/data.db'
+
+        print databaseFilePath
+        db = sqlite3.connect(databaseFilePath)
+        c = db.cursor()
+
+        BoxID = None
+        c.execute("SELECT BoxID FROM Box LIMIT 1;");
+        for record in c.fetchall():
+          BoxID = record[0]
+
+        url = ConfReader.GetAPIURLCom() +"SaveZip/"+str(BoxID)
+
+        print url
+
+        GetFileInfo.GenerateDailyDeviceBackupZip()
+        b64ary = FileTOBase64ByteArray("/home/pi/bkp.tar")
+
+        postdata ={ "ZipBase64String": b64ary,"Timestamp": time.time(),"UploadArea": 1 }
+
+        #print postdata
+
+        PostJsonDataToURL(url,postdata)
+
+    except Exception,e:
+        print str(e)
+
+
+def PostDeviceBackupZipToCMS():
+    try:
+
+        databaseFilePath = ConfReader.GetValue(ConfReader.strDBFilePathKey)#'/home/pi/pythonlogger.py/data.db'
+
+        print databaseFilePath
+        db = sqlite3.connect(databaseFilePath)
+        c = db.cursor()
+
+        BoxID = None
+        c.execute("SELECT BoxID FROM Box LIMIT 1;");
+        for record in c.fetchall():
+          BoxID = record[0]
+
+        url = ConfReader.GetAPIURLCom() +"SaveZip/"+str(BoxID)
+
+        print url
+
+        GetFileInfo.GenerateDailyDeviceBackupZip()
+        b64ary = FileTOBase64ByteArray("/home/pi/bkp.tar")
+
+        postdata ={ "ZipBase64String": b64ary,"Timestamp": time.time(),"UploadArea": 2 }
+
+        PostJsonDataToURL(url,postdata)
+
+    except Exception,e:
+        print str(e)
+
+PostDeviceReportZipToCMS()
+PostDailyDeviceBackupZipToCMS()
+PostDeviceBackupZipToCMS()

@@ -15,9 +15,10 @@ def main():
         req = urllib2.Request(url)
         req.add_header('Content-Type','application/json')
 
+        #if DataUsed > 0:
         response = urllib2.urlopen(req)
         js = json.load(response)
-
+        #print response
         if js['StatusCode'] == 200:
 
             with open("/home/pi/freeSites", "w+") as myfile:
@@ -25,7 +26,7 @@ def main():
                 FreeUrls = js['ReturnObject']
 
                 for FreeURL in FreeUrls:
-                    myfile.write(str(FreeURL["WebsiteURL"]).replace("http://","")+"\n")
+                    myfile.write(str(FreeURL["WebsiteURL"])+"\n")
                     #print str(FreeURL["WebsiteURL"])+"\n"
 
     except Exception, e:

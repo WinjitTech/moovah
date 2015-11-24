@@ -181,12 +181,6 @@ def runWhiteList():
         #-----------------------------------------Removing IPs Which Are Not In White List-----------------------------------------
         IP_ALL = IP_LIST_PREVIOUS + IP_LIST_CURRENT
 
-        #for LIST1 in IP_LIST_PREVIOUS:
-        #	IP_ALL.append(LIST1)
-
-        #for LIST2 in IP_LIST_CURRENT:
-        #	IP_ALL.append(LIST2)
-
         for block in IP_ALL:
             strBlock = ''.join(block)
             strBlock = strBlock.replace("[","")

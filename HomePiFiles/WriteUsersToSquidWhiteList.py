@@ -1,5 +1,5 @@
 import sqlite3
-0
+
 
 def updateWhitelist():
 
@@ -18,6 +18,8 @@ def updateWhitelist():
 
                 if DataBalance > 0:
                     myfile.write(str(IP)+"\r\n")
+                    #os.system("sudo iptables -t nat -D PREROUTING -i wlan0 -s "+ str(IP) +" -p tcp --dport 443 -DNAT --to 192.168.5.51:3128")
+                    #This iptables command removes the entry from nat table if already present
 
         print "users updated to whitelist"
 
