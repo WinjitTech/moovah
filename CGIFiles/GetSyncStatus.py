@@ -57,6 +57,7 @@ try:
     Result["IsTermsAndConditions"]=False
     Result["IsGeneralSettings"]=False
     Result["IsLocation"]=False
+    Result["IsUserTagging"]=False
 
     i=0
     for kval in postData:
@@ -185,6 +186,12 @@ try:
             c.execute("select * from Locations where ModifiedDate > '" + (kval["LastSyncDateTime"]) + "';")
             for rec in c.fetchall():
                 Result["IsLocation"]=True
+                break
+
+        if kval["Key"] == "UserTagging":
+            c.execute("select * from UserTagging where ModifiedDate > '" + (kval["LastSyncDateTime"]) + "';")
+            for rec in c.fetchall():
+                Result["IsUserTagging"]=True
                 break
 
 

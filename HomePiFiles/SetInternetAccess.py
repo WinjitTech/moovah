@@ -10,33 +10,34 @@ try:
 
     CTimeStamp = int(time.time())
 
-    strQuery ="SELECT IP,DataBalance FROM Users;"
+    strQuery = "SELECT IP,DataBalance FROM Users;"
     c.execute(strQuery);
 
-    fd = open("/etc/squid3/whitelist",'r')
+    fd = open("/etc/squid3/whitelist", 'r')
     whitelist = fd.readlines()
+    whitelist = [x.replace("\r\n", " ") for x in whitelist]
     fd.close()
+    print whitelist
 
     with open("/etc/squid3/whitelist", "w+") as myfile:
         for record in c.fetchall():
             IP = record[0]
-            Timestamp= record[1]
+            Timestamp = record[1]
 
-            if (int(Timestamp)<int(CTimeStamp)) and (int(Timestamp)>0):
-                print "IP: "+str(IP)
+            if (int(Timestamp) < int(CTimeStamp)) and (int(Timestamp) > 0):
+                print whitelist
+                print "IP: " + str(IP)
                 if IP in whitelist:
                     whitelist.remove(IP)
-                # myfile.write(str(IP)+"\r\n")
-
-                print "Internet blocked for : "+str(IP)
+                if str(IP) + " " in whitelist:
+                    whitelist.remove(str(IP) + " ")
+                print "Internet blocked for : " + str(IP)
             else:
-                print "Internet allowed for : "+str(IP)
-
+                print "Internet allowed for : " + str(IP)
+        print whitelist
+        whitelist = [x.replace(" ", "\r\n") for x in whitelist]
         myfile.writelines(whitelist)
     db.close()
 
 except Exception, e:
-    print "Error : "+str(e)
-
-
-
+    print "Error : " + str(e)

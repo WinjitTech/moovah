@@ -227,6 +227,14 @@ def GenerateJsonDataForRequest():
 
     postdata += {'Key':'GeneralSettings','LastSyncDateTime':str(lastSyncDateTime)},
 
+    #GeneralSettings
+    lastSyncDateTime=  "0001-01-01%2000:00:00.000" #datetime.datetime.now()
+    c.execute('select ModifiedDate from UserTagging order by ModifiedDate desc LIMIT 1')
+    for record in c.fetchall():
+        lastSyncDateTime = record[0]
+
+    postdata += {'Key':'UserTagging','LastSyncDateTime':str(lastSyncDateTime)},
+
 
     return postdata
 

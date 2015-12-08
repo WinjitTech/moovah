@@ -3,6 +3,7 @@ import urllib2
 import sqlite3
 import ConfReader
 import getDataUsageByIPs
+import time
 
 def readFileToMatrix(fd):
     dataMatrix,i={},0
@@ -108,19 +109,6 @@ def main():
             LogData[i]={ "UserID":userID ,"Bytes":BytesUsed, "URL":URLVisited,"IpAddress":IpAddress,"BoxID":BoxID }
             i+=1
 
-    # UserIDs =UserIDs[:-1]
-    #
-    # strQuery ="SELECT userID,IP FROM Users where userID not in ("+UserIDs+");"
-    # c.execute(strQuery);
-    # for record in c.fetchall():
-    #     userID = record[0]
-    #     IpAddress = record[1]
-    #
-    #     if userID is not None:
-    #
-    #         LogData[i]={ "UserID":userID ,"Bytes":0, "URL":str(ConfReader.GetAPIURL()),"IpAddress":str(IpAddress),"BoxID":BoxID }
-    #         i+=1
-
     #For HTTPS data
     IPList=[]
     strQuery ="SELECT IP FROM Users;"
@@ -172,6 +160,7 @@ def main():
         if js['StatusCode'] == 200:
 
             LogSend=1
+            CTimeStamp = int(time.time())-60
 
             with open("/etc/squid3/whitelist", "w+") as myfile:
                 myfile.write("192.168.5.1"+"\r\n")
@@ -179,12 +168,18 @@ def main():
                 IPList=[]
 
                 for UserID in WhiteList:
-                    strQuery ="SELECT IP FROM Users where userID='"+str(UserID)+"';"
+                    strQuery ="SELECT IP,DataBalance FROM Users where userID='"+str(UserID)+"';"
                     c.execute(strQuery);
                     for record in c.fetchall():
                         IP = record[0]
-                        IPList.append(IP)
-                        myfile.write(str(IP)+"\r\n")
+                        Timestamp = record[1]
+                        print IP
+                        print Timestamp
+                        print(CTimeStamp)
+                        if (int(Timestamp) >= int(CTimeStamp)) or (int(Timestamp) == 0):
+                            print "whitelist: "+str(IP)
+                            IPList.append(IP)
+                            myfile.write(str(IP)+"\r\n")
 
             print "RESET:" + str(IPList)
             getDataUsageByIPs.resetDataUsageOfIPs(IPList)

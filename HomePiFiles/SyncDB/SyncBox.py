@@ -28,6 +28,7 @@ import Sponsor
 import Survey
 import SubCategory
 import TermsAndCondition
+import UserTagging
 
 import MoovahLogger
 
