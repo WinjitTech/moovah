@@ -121,8 +121,8 @@ def CheckAndDownloadFile(key,RemoteURL):
 
         ]
 
-        LocaPath ="/media/usb0/moovah"
-        #LocaPath ="/home/pi"
+        #LocaPath ="/media/usb0/moovah"
+        LocaPath ="/home/pi"
 
         if key in ContentTokens and RemoteURL is not None and RemoteURL is not '':
             parse_object = urlparse.urlparse(RemoteURL)
@@ -178,8 +178,8 @@ def CheckAndDownloadFile(key,RemoteURL,SectionEnumVal,RecordID):
 
         ]
 
-        LocaPath ="/media/usb0/moovah"
-        #LocaPath ="/home/pi"
+        #LocaPath ="/media/usb0/moovah"
+        LocaPath ="/home/pi"
 
         if key in ContentTokens and RemoteURL is not None and RemoteURL is not '':
             parse_object = urlparse.urlparse(RemoteURL)
