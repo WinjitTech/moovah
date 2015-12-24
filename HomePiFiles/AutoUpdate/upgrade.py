@@ -87,7 +87,7 @@ def StartUpgradeProcess():
 
         if str(IsBoxSpecificUpgrade) == "true" and ((BoxSpecificPath is not None) or (BoxSpecificPath is not '')):
 
-            FileMgr.DownloadFileToPath(GlobalPath,UpgradeZipLocalPath)
+            FileMgr.DownloadFileToPath(BoxSpecificPath,UpgradeZipLocalPath)
             MoovahLogger.logger.info("Box specific upgrade in process, global upgrade will be skiped till next schedule.")
         else:
 
