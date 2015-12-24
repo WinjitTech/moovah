@@ -82,12 +82,23 @@ def StartUpgradeProcess():
 
             return
 
+        ######### New Code added for Box Specific upgrade #######
+        ######### Box Specific Code Start #######
 
-        if (GlobalPath is None or GlobalPath is ''):
-            MoovahLogger.logger.info("Global upgrade path is emtry, upgrade process will now stop.")
-            return
-        else:
+        if str(IsBoxSpecificUpgrade) == "true" and ((BoxSpecificPath is not None) or (BoxSpecificPath is not '')):
+
             FileMgr.DownloadFileToPath(GlobalPath,UpgradeZipLocalPath)
+            MoovahLogger.logger.info("Box specific upgrade in process, global upgrade will be skiped till next schedule.")
+        else:
+
+        ######### Box Specific Code End #######
+
+            if (GlobalPath is None or GlobalPath is ''):
+                MoovahLogger.logger.info("Global upgrade path is emtry, upgrade process will now stop.")
+                return
+            else:
+                FileMgr.DownloadFileToPath(GlobalPath,UpgradeZipLocalPath)
+
 
         #Step 4:
         #Create folder and unzip files to local folder.
