@@ -32,7 +32,6 @@ def StartUpgradeProcess():
             UpgradeLocalPath = record[2]
             UpgradeZipLocalPath = record[3]
 
-
         MoovahLogger.logger.debug("Upgrade path: "+str(UpgradeLocalPath))
         #Delete all UnCompressed Files
         Schedular.runCommand("rm -rf "+UpgradeLocalPath+"*",1)
@@ -46,6 +45,12 @@ def StartUpgradeProcess():
         for record in c.fetchall():
             BoxID = record[0]
 
+        if ((BoxID is not None) or (BoxID is not '')):
+            BoxID=41
+
+        if ((BoxVersion is not None) or (BoxVersion is not '')):
+            BoxVersion='0.00'
+
         c.execute("insert into upgradelog(BoxID,BoxVersion,IsUpgradeStarted,DateTime) values("+str(BoxID)+","+str(BoxVersion)+",1,'"+str(datetime.datetime.now())+"');");
 
         #Close database
@@ -55,6 +60,8 @@ def StartUpgradeProcess():
 
         apiurl =ConfReader.GetAPIURLCom() +"GetBoxVersionNew/"+ str(BoxID)
 
+        print apiurl
+
         j = urllib2.urlopen(apiurl)
         js = json.load(j)
         GlobalPath = js['ReturnObject'][0]['GlobalPath']
@@ -62,10 +69,13 @@ def StartUpgradeProcess():
         IsBoxSpecificUpgrade = js['ReturnObject'][0]['IsBoxSpecificUpgrade']
         GlobalVersion = js['ReturnObject'][0]['GlobalVersion']
 
+        if str(IsBoxSpecificUpgrade).lower() == "false" and ((GlobalVersion is None) or (GlobalVersion is '')):
+            MoovahLogger.logger.info("GlobalVersion is "+str(GlobalVersion) + " upgrade process will terminate now.")
+            return
 
         #Step 3. Check for Box Version and GlobalVersion
 
-        if float(BoxVersion)>=float(GlobalVersion):
+        if str(IsBoxSpecificUpgrade).lower() == "false" and float(BoxVersion)>=float(GlobalVersion):
             MoovahLogger.logger.info("Box is already having latest version, BoxVersion is "+str(BoxVersion) + "and GlobalVersion is "+str(GlobalVersion))
 
             #Step 10:
@@ -85,9 +95,16 @@ def StartUpgradeProcess():
         ######### New Code added for Box Specific upgrade #######
         ######### Box Specific Code Start #######
 
-        if str(IsBoxSpecificUpgrade) == "true" and ((BoxSpecificPath is not None) or (BoxSpecificPath is not '')):
+        if str(IsBoxSpecificUpgrade).lower() == "true" and ((BoxSpecificPath is not None) or (BoxSpecificPath is not '')):
 
-            FileMgr.DownloadFileToPath(BoxSpecificPath,UpgradeZipLocalPath)
+            print str(IsBoxSpecificUpgrade)
+            print BoxSpecificPath
+            print UpgradeZipLocalPath
+
+            DownloadStatus = FileMgr.DownloadFileToPath(BoxSpecificPath,UpgradeZipLocalPath)
+
+            print "DownloadStatus"+str(DownloadStatus)
+
             MoovahLogger.logger.info("Box specific upgrade in process, global upgrade will be skiped till next schedule.")
         else:
 
@@ -98,6 +115,7 @@ def StartUpgradeProcess():
                 return
             else:
                 FileMgr.DownloadFileToPath(GlobalPath,UpgradeZipLocalPath)
+                MoovahLogger.logger.info("Global upgrade in process.")
 
 
         #Step 4:

@@ -60,6 +60,7 @@ def CheckURLStatus(url):
 def DownloadFileToPath(RemotePath,LocalPath):
     try:
         status = CheckURLStatus(RemotePath)
+        print status
         if status == "200":
             testfile = urllib.URLopener()
             commands.getoutput("mkdir -p "+dirname(LocalPath))
