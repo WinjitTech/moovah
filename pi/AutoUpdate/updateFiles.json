@@ -1,0 +1,12 @@
+{
+"APIURL_Staging":"http://192.168.0.11/KhoolooAPI/",
+"APIURL_StagingLive":"http://192.168.0.11/KhoolooAPILive/",
+"APIURL_LiveTesting":"http://168.63.241.212:81/KhoolooTestingAPI/",
+"APIURL_Live":"http://168.63.241.212/API/",
+"AccessLogFilePath":"/var/log/squid3/access.log",
+"DatabaseFilePath":"/home/pi/pythonlogger.py/data.db",
+"SyncDBFilePath":"/home/pi/khooloo.sqlite",
+"CMSIP":"168.63.241.212",
+"BOXIP":"192.168.5.1",
+"Mode":"4"
+}

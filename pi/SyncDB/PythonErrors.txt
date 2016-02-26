@@ -1,0 +1,7 @@
+postBoxDetailsOncms.py ###### No JSON object could be decoded
+postBoxDetailsOncms.py ###### No JSON object could be decoded
+postBoxDetailsOncms.py ###### 'str' object has no attribute 'read'
+postBoxDetailsOncms.py ###### 'str' object has no attribute 'read'
+postBoxDetailsOncms.py ###### 'unicode' object has no attribute 'read'
+postBoxDetailsOncms.py ###### 'str' object has no attribute 'read'
+postBoxDetailsOncms.py ###### split() takes no keyword arguments
