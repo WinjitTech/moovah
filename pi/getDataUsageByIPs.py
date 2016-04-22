@@ -109,7 +109,7 @@ def resetDataUsageOfIPs(IP_LIST):
             os.system(DELETE_IP)
             DELETE_IP = "sudo iptables -D OUTPUT -d %s" % content
             os.system(DELETE_IP)
-            print "Blocking IP : %s" % DELETE_IP
+            # print "Blocking IP : %s" % DELETE_IP
             ADD_IP = "sudo iptables -I FORWARD 1 -s %s -j ACCEPT" % content
             os.system(ADD_IP)
             ADD_IP = "sudo iptables -I FORWARD 1 -d %s -j ACCEPT" % content

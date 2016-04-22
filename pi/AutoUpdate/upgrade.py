@@ -31,6 +31,8 @@ def StartUpgradeProcess():
             BoxVersion = record[1]
             UpgradeLocalPath = record[2]
             UpgradeZipLocalPath = record[3]
+	
+
 
         MoovahLogger.logger.debug("Upgrade path: "+str(UpgradeLocalPath))
         #Delete all UnCompressed Files
@@ -44,6 +46,12 @@ def StartUpgradeProcess():
         BoxID=43
         for record in c.fetchall():
             BoxID = record[0]
+	
+        if ( (BoxID is  None) or (BoxID is '')):
+            BoxID=41
+
+        if ((BoxVersion is None) or (BoxVersion is '')):
+            BoxVersion='0.00'
 
         c.execute("insert into upgradelog(BoxID,BoxVersion,IsUpgradeStarted,DateTime) values("+str(BoxID)+","+str(BoxVersion)+",1,'"+str(datetime.datetime.now())+"');");
 
@@ -53,7 +61,8 @@ def StartUpgradeProcess():
         #Step 2: Get Update version from CMS
 
         apiurl =ConfReader.GetAPIURLCom() +"GetBoxVersionNew/"+ str(BoxID)
-#	print apiurl
+
+
         j = urllib2.urlopen(apiurl)
         js = json.load(j)
         GlobalPath = js['ReturnObject'][0]['GlobalPath']
@@ -61,31 +70,65 @@ def StartUpgradeProcess():
         IsBoxSpecificUpgrade = js['ReturnObject'][0]['IsBoxSpecificUpgrade']
         GlobalVersion = js['ReturnObject'][0]['GlobalVersion']
 
+	print IsBoxSpecificUpgrade
+        if str(IsBoxSpecificUpgrade).lower() == "false" and ((GlobalVersion is None) or (GlobalVersion is '')):
+            MoovahLogger.logger.info("GlobalVersion is "+str(GlobalVersion) + " upgrade process will terminate now.")
+            return
+
         #Step 3. Check for Box Version and GlobalVersion
 
-        if float(BoxVersion)>=float(GlobalVersion):
+        if str(IsBoxSpecificUpgrade).lower() == "false" and float(BoxVersion)>=float(GlobalVersion):
             MoovahLogger.logger.info("Box is already having latest version, BoxVersion is "+str(BoxVersion) + "and GlobalVersion is "+str(GlobalVersion))
-
+	    print ("Box is already having latest version, BoxVersion is "+str(BoxVersion) + " and GlobalVersion is "+str(GlobalVersion))
             #Step 10:
             #Give call to LiveAPI about upgrade process is finished
 
             apiurl =ConfReader.GetAPIURLCom() +"UpdateBoxVersion"
             postdata = {"BoxID": BoxID,"BoxVersion": BoxVersion,"IsBoxSpecificUpgrade": False}
-	    req = urllib2.Request(apiurl)
-
+	    
+            req = urllib2.Request(apiurl)
             req.add_header('Content-Type','application/json')
-            data = json.dumps(postdata)
-
+	    data = json.dumps(postdata)
+            
             response = urllib2.urlopen(req,data)
 
             return
 
+        ######### New Code added for Box Specific upgrade #######
+        ######### Box Specific Code Start #######
 
-        if (GlobalPath is None or GlobalPath is ''):
-            MoovahLogger.logger.info("Global upgrade path is emtry, upgrade process will now stop.")
-            return
+        if str(IsBoxSpecificUpgrade).lower() == "true" and ((BoxSpecificPath is not None) or (BoxSpecificPath is not '')):
+	   
+            print str(IsBoxSpecificUpgrade)
+            print BoxSpecificPath
+            print UpgradeZipLocalPath
+
+            DownloadStatus = FileMgr.DownloadFileToPath(BoxSpecificPath,UpgradeZipLocalPath)
+
+            print "DownloadStatus"+str(DownloadStatus)
+
+	    apiurl =ConfReader.GetAPIURLCom() +"UpdateBoxVersion"
+	    
+            postdata = {"BoxID": BoxID,"BoxVersion": GlobalVersion,"IsBoxSpecificUpgrade": True}
+            print postdata
+            req = urllib2.Request(apiurl)
+            req.add_header('Content-Type','application/json')
+            data = json.dumps(postdata)
+	    response = urllib2.urlopen(req,data)
+
+            MoovahLogger.logger.info("Box specific upgrade successful.")
         else:
-            FileMgr.DownloadFileToPath(GlobalPath,UpgradeZipLocalPath)
+
+        ######### Box Specific Code End #######
+
+            if (GlobalPath is None or GlobalPath is ''):
+                MoovahLogger.logger.info("Global upgrade path is emtry, upgrade process will now stop.")
+                return
+            else:
+
+                FileMgr.DownloadFileToPath(GlobalPath,UpgradeZipLocalPath)
+                MoovahLogger.logger.info("Global upgrade in process.")
+
 
         #Step 4:
         #Create folder and unzip files to local folder.
@@ -169,12 +212,15 @@ def StartUpgradeProcess():
 
         apiurl =ConfReader.GetAPIURLCom() +"UpdateBoxVersion"
         postdata = {"BoxID": BoxID,"BoxVersion": GlobalVersion,"IsBoxSpecificUpgrade": False}
+	print postdata
         req = urllib2.Request(apiurl)
         req.add_header('Content-Type','application/json')
         data = json.dumps(postdata)
-	
-        response = urllib2.urlopen(req,data)
 
+	print data
+
+        response = urllib2.urlopen(req,data)
+	print response
         MoovahLogger.logger.info("Box Upgraded to "+str(GlobalVersion) + " successfully")
 
 

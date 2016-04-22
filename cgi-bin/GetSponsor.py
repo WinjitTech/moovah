@@ -33,8 +33,8 @@ try:
 
     c = db.cursor()
 
-
     c.execute("select * from Sponsor where ModifiedDate > '" + (lastSyncDateTime) + "';")
+#    c.execute("select * from Sponsor where ModifiedDate > '" + (lastSyncDateTime) + "';")
 
 
     results = c.fetchall()

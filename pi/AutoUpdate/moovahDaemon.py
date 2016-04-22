@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python
 
 import sys
@@ -28,10 +27,13 @@ class MyDaemon(Daemon):
                 #WriteUsersToSquidWhiteList.updateWhitelist()
                 sudoPassword = 'winjit123'
 
-                command = "python /home/pi/AutoUpdate/Schedular.py start"
+                command = "python /home/pi/AutoUpdate/Schedular.py restart"
                 result = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
 
-                command = "python /home/pi/AutoUpdate/ReportDaemon.py start"
+                command = "python /home/pi/AutoUpdate/ReportDaemon.py restart"
+                result = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
+		
+		command = "python /home/pi/AutoUpdate/SendDataDeamon.py restart"
                 result = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
 
                 MoovahLogger.logger.info("moovahDaemon Started")

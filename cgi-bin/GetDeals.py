@@ -32,9 +32,7 @@ try:
 
     c = db.cursor()
 
-
     c.execute("select * from Deals where ModifiedDate > '" + (lastSyncDateTime) + "';")
-
 
     results = c.fetchall()
 
@@ -44,7 +42,6 @@ try:
         results2 =c.fetchall()
         result['DealLocations'] = results2
 
-
     for result in results:
         strQuery = "select * from DealsBoxMapping where DealID = " + str(result['Id'])
         c.execute(strQuery)
@@ -53,15 +50,12 @@ try:
 
     response['ReturnObject'] = results
 
-
     print json.JSONEncoder().encode(response)
 
 except Exception,e:
         with open("PythonErrors.txt", "a") as myfile:
             myfile.write("postBoxDetailsOncms.py "+"###### "+str(e) +"\r\n")
         response = {'result': str(e)}
-
-
 
 #print json.JSONEncoder().encode(response)
 

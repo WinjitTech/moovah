@@ -39,9 +39,9 @@ try:
     GlobalVersion = js['ReturnObject'][0]['GlobalVersion']
 
     if BoxVersion>=GlobalVersion:
-        upgradeflag=1
-    else:
         upgradeflag=0
+    else:
+        upgradeflag=1
 
     response = {'boxversion':BoxVersion,
                 'globalversion':GlobalVersion,

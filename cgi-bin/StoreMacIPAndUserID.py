@@ -25,9 +25,9 @@ try:
     c = db.cursor()     
 
     if userid is None:
-            c.execute("select Count(*) from Users where IP = '" + str(ip) + "';")
+            c.execute("select Count(*) from Users where IP = '" + str(ip) + "' or MacID = '" + str(macid) + "';")
     else:
-            c.execute("select Count(*) from Users where IP = '" + str(ip) + "';")
+            c.execute("select Count(*) from Users where IP = '" + str(ip) + "' or userID = '" + str(userid) + "' or MacID = '" + str(macid) + "';")
 
     recordCount = 0
     for record in c.fetchall():
@@ -35,7 +35,7 @@ try:
 
 
     if recordCount > 1:
-        c.execute("delete from Users where IP = '" + str(ip) + "';")
+        c.execute("delete from Users where IP = '" + str(ip) + "' or userID = '" + str(userid) + "' or MacID = '" + str(macid) + "';")
 
     isCreated=False
     strQuery=""
@@ -45,9 +45,10 @@ try:
         isCreated=False
 
         if userid is None:
-            c.execute("UPDATE Users SET MacID='"+str(macid)+"',  IP='"+str(ip)+"', userID='"+str(userid)+"',IsConnected=0 WHERE IP ='"+str(ip)+"';")
+            c.execute("UPDATE Users SET MacID='"+str(macid)+"',  IP='"+str(ip)+"', userID='"+str(userid)+"',IsConnected=0 WHERE IP ='"+str(ip)+"' or MacID = '"+str(macid)+"';")
         else:        
-            c.execute("UPDATE Users SET MacID='"+str(macid)+"',  IP='"+str(ip)+"', userID='"+str(userid)+"',IsConnected=0 WHERE IP ='"+str(ip)+"';")
+            c.execute("UPDATE Users SET MacID='"+str(macid)+"',  IP='"+str(ip)+"', userID='"+str(userid)+"',IsConnected=0 WHERE IP ='" + str(ip) + "' or userID = '" + str(userid) + "' or MacID = '" + str(macid) + "';")
+
     else:
 
         isCreated=True
@@ -63,9 +64,9 @@ try:
     response = {'result':'true','macID':macid,'IP':ip,'UserID':userid,'recordCount':recordCount,'IsCreated':isCreated}
     
 except Exception,e:
-        with open("PythonErrors.txt", "a") as myfile:
-            myfile.write("postBoxDetailsOncms.py "+"###### "+str(e) +"\r\n")        
-        response = {'result': str(e)}
+	with open("PythonErrors.txt", "a") as myfile:
+		myfile.write("postBoxDetailsOncms.py "+"###### "+str(e) +"\r\n")        
+	response = {'result': str(e)}
 
 
 

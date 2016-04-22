@@ -33,10 +33,8 @@ try:
 
     c = db.cursor()
 
-
-    c.execute("select * from Adverts where ModifiedDate > '" + (lastSyncDateTime) + "';")
-
-
+#    c.execute("select * from Adverts where ModifiedDate > '" + (lastSyncDateTime) + "' and isRingFence=0;")
+    c.execute("select Id ,Title ,AdvertPath ,ThumbnailPath ,SponsorImage ,SponsorLink ,Preferences ,MediaID ,ValidFrom ,ValidTill ,DurationInSeconds ,CreditPoint,URL ,IsGeneral,IsWatched bool  ,IsActive,ModifiedDate ,pointsEarned,IsGPS,GPSLocations ,Radius,IsBoxData,LocalPath ,VisitedID,IsViewLimitReached,Price from Adverts where ModifiedDate > '" + (lastSyncDateTime) + "' and isRingFence=0;")
     results = c.fetchall()
 
     for result in results:
@@ -45,10 +43,7 @@ try:
         results2 =c.fetchall()
         result['AdvertMapping'] = results2
 
-
-
     response['ReturnObject'] = results
-
 
     print json.JSONEncoder().encode(response)
 
@@ -56,8 +51,6 @@ except Exception,e:
         with open("PythonErrors.txt", "a") as myfile:
             myfile.write("postBoxDetailsOncms.py "+"###### "+str(e) +"\r\n")
         response = {'result': str(e)}
-
-
 
 #print json.JSONEncoder().encode(response)
 

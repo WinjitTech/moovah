@@ -3,31 +3,32 @@ import ConfReader
 import time
 import MoovahLogger
 
-def execute(strQuery):
 
+def execute(strQuery):
     try:
-        NoOfAttempts=10
+        NoOfAttempts = 10
 
         con = sqlite3.connect(ConfReader.GetSyncDBPath())
-        con.isolation_level=None
+        con.isolation_level = None
         c = con.cursor()
 
-        while NoOfAttempts>0:
+        while NoOfAttempts > 0:
 
-            NoOfAttempts-=1
+            NoOfAttempts -= 1
             try:
                 c.execute(strQuery)
                 con.commit()
                 break
 
-            except Exception,e:
-                print("Insert error (Retry atempt:"+str(NoOfAttempts))
+            except Exception, e:
+                print strQuery               
+                print("Insert error (Retry attempt:" + str(NoOfAttempts))
                 time.sleep(5)
-                continue
+#                continue
 
-    except Exception,e:
+    except Exception, e:
         print str(e)
-        MoovahLogger.logger.info("[SyncDB] error in query : "+str(e))
+        MoovahLogger.logger.info("[SyncDB] error in query : " + str(e))
 
     finally:
         if con:

@@ -84,4 +84,10 @@ imgpath = GetCMSData.GetData('Surveys')
 
 insertOrUpdateRecord(imgpath,"Survey",None)
 
+con = sqlite3.connect(ConfReader.GetSyncDBPath())
+con.isolation_level = None
+c = con.cursor()
+c.execute("update Survey set ProvinceId = -1 where ProvinceId is Null;")
+con.close()
+
 MoovahLogger.logger.info("Surveys updated successfully")

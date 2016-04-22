@@ -7,11 +7,15 @@ import sys
 import sqliteUtilities
 import ConfReader
 
+#postData=[{
+#    "Key": "Surveys",
+#    "LastSyncDateTime": "2016-03-29T09:08:25.763"
+#  }]
 postData={}
 postData = sys.stdin.read()
 
 if postData is not None or postData is not '':
-    postData =json.loads(postData)
+        postData =json.loads(postData)
 
 #lastSyncDateTime= "0001-01-01 00:00:00.000" #datetime.datetime.now()
 
@@ -61,7 +65,7 @@ try:
 
     i=0
     for kval in postData:
-
+#        print kval
         if kval["Key"] == "Albums":
             c.execute("select * from Album where ModifiedDate > '" + (kval["LastSyncDateTime"]) + "';")
             for rec in c.fetchall():
@@ -194,20 +198,16 @@ try:
                 Result["IsUserTagging"]=True
                 break
 
-	if kval["Key"] == "SponsorLinking":
-            c.execute("select * from SponsorLinking where ModifiedDate > '" + (kval["LastSyncDateTime"]) + "';")
-            for rec in c.fetchall():
-                Result["IsSponsorLinking"]=True
-                break
 
     response['ReturnObject'] = [Result]
 
-    #print json.JSONEncoder().encode(response)
+    print json.JSONEncoder().encode(response)
 
 except Exception,e:
         with open("PythonErrors.txt", "a") as myfile:
             myfile.write("postBoxDetailsOncms.py "+"###### "+str(e) +"\r\n")
         response = {'result': str(e)}
+        print str(e)
 
 print json.JSONEncoder().encode(response)
 

@@ -6,10 +6,10 @@ import datetime
 import MoovahLogger
 
 try:
-    #sys.argv = ['postBoxDetailsOncms.py', '--BoxID="40"']
-    #sys.argv = ['SyncDataFile.py', '--CleanDB=0']
+    # sys.argv = ['postBoxDetailsOncms.py', '--BoxID="40"']
+    # sys.argv = ['SyncDataFile.py', '--CleanDB=0']
 
-    opts, args = getopt.getopt(sys.argv[1:],'h:',["CleanDB="])
+    opts, args = getopt.getopt(sys.argv[1:], 'h:', ["CleanDB="])
 except getopt.GetoptError:
     print 'SyncDataFile.py [--CleanDB=1] '
     sys.exit(2)
@@ -30,11 +30,11 @@ DateTimeSyncStarted = d.strftime('%Y-%m-%d %H:%M:%S')
 try:
     GetCMSData.GetDataFromCMS()
     print 'Database file downloaded successfully'
-    MoovahLogger.logger.info( "Sync data file updated successfully")
-    FillReports.InsertIntoboxsyncdatalog(DateTimeSyncStarted,'',0,'')
-except Exception,e:
-    print "Sync data file update failed : "+str(e)
-    MoovahLogger.logger.info( "Sync data file update failed : "+str(e))
+    MoovahLogger.logger.info("Sync data file updated successfully")
+    FillReports.InsertIntoboxsyncdatalog(DateTimeSyncStarted, '', 0, '')
+except Exception, e:
+    print "Sync data file update failed : " + str(e)
+    MoovahLogger.logger.info("Sync data file update failed : " + str(e))
     d = datetime.datetime.now()
     DateTimeSyncStoped = d.strftime('%Y-%m-%d %H:%M:%S')
-    FillReports.InsertIntoboxsyncdatalog(DateTimeSyncStarted,DateTimeSyncStoped,0,'')
+    FillReports.InsertIntoboxsyncdatalog(DateTimeSyncStarted, DateTimeSyncStoped, 0, '')

@@ -70,7 +70,7 @@ def main():
         if AndroidVersion != AndroidVersionLocal:
 
             if AndroidBuildLocal is None or AndroidBuildLocal is '':
-                AndroidBuildLocal = "/media/usb0/moovah/Apps/android/moovah.apk"
+                AndroidBuildLocal = "/var/www/moovah/Apps/android/moovah.apk"
 
             FileMgr.DownloadFileToPath(AndroidBuild,AndroidBuildLocal)
             Schedular.runCommand("chmod 777 -R "+AndroidBuildLocal,1)
@@ -84,7 +84,7 @@ def main():
         if BlackBerryVersion != BlackBerryVersionLocal:
 
             if BlackBerryBuildLocal is None or BlackBerryBuildLocal is '':
-                BlackBerryBuildLocal = "/media/usb0/moovah/Apps/blackberry/"
+                BlackBerryBuildLocal = "/var/www/moovah/Apps/blackberry/"
 
             FileMgr.DownloadFileToPath(BlackBerryBuild,BlackBerryBuildLocal+"moovah.zip")
 

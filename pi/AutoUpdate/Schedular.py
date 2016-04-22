@@ -3,6 +3,7 @@ import time
 import os
 import sqlite3
 import sys
+import subprocess
 
 import MoovahLogger
 from daemon import Daemon
@@ -30,8 +31,12 @@ def runCommand(command,IsSudo):
             result = os.system('echo %s|sudo -S %s' % (sudoPassword, command))
         else:
             result = os.system(command)
+        # if IsSudo == 1:
+        #     result = subprocess.Popen('echo %s|sudo -S %s' % (sudoPassword, command), shell=True, stdout=subprocess.PIPE)
+        # else:
+        #     result = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
 
-        MoovahLogger.logger.debug("Command Executed :"+str(command))
+        # MoovahLogger.logger.debug("Command Executed :"+str(command))
         return result
 
     except Exception,e:
@@ -52,6 +57,7 @@ def RunOnceAt(DateNTime,Command,IsSudo,ID):
 
             c.execute("update schedule SET IsActive=0 where ID ='"+str(ID)+"';");
             db.commit()
+            db.close()
 
             MoovahLogger.logger.debug("Command '"+str(Command)+"' is Deactivated")
 
@@ -59,7 +65,6 @@ def RunOnceAt(DateNTime,Command,IsSudo,ID):
 
             MoovahLogger.logger.debug("RunOnceAt Executed For Schedule ID="+str(ID))
 
-        db.close()
     except Exception,e:
         MoovahLogger.logger.error("RunOnce: "+str(e))
         ReOpenDBConn()
@@ -67,25 +72,23 @@ def RunOnceAt(DateNTime,Command,IsSudo,ID):
 def RunEvery(dtCurrent,Command,IsSudo,ID,Interval):
 
     try:
-        db = sqlite3.connect("/home/pi/AutoUpdate/Schedular.sqlite")
-        db.isolation_level=None
-        c = db.cursor()
 
         dtCurrent = datetime.datetime.strptime(dtCurrent, "%Y-%m-%d %H:%M:%S.%f")
 
         if (dtCurrent <= datetime.datetime.now()):
 
+            db = sqlite3.connect("/home/pi/AutoUpdate/Schedular.sqlite")
+            db.isolation_level=None
+            c = db.cursor()
+
             dtNew = addSecs(datetime.datetime.now(),Interval)
             c.execute("update schedule SET DateTime='"+str(dtNew)+"' where ID ='"+str(ID)+"';");
             db.commit()
-
-            MoovahLogger.logger.debug("Command '"+str(Command)+"' will next execute at"+str(dtNew))
-
+            db.close()
 
             Result = runCommand(Command,IsSudo)
-            MoovahLogger.logger.debug("RunEvery Executed For Schedule ID="+str(ID))
+            MoovahLogger.logger.debug("Sch = '"+str(ID)+"' next run at "+str(dtNew))
 
-        db.close()
         #time.sleep(SleepInterval)
     except Exception,e:
         MoovahLogger.logger.error("RunEvery: "+str(e))
@@ -130,7 +133,7 @@ def StartSchedular():
         LocalPath = '/var/run/SchedularDaemon/'
         PidFile = LocalPath +'SchedularDaemon.pid'
         ObjDaemon = MyDaemon(PidFile)
-        ObjDaemon.start()
+        ObjDaemon.restart()
     except Exception,e:
         MoovahLogger.logger.error("StartSchedular :"+str(e))
 

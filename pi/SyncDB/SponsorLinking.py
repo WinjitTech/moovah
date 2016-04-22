@@ -6,16 +6,16 @@ import MoovahLogger
 import SyncDBMgr as c
 import json
 
-def insertOrUpdateRecord(jsondata,tblName,ModuleId):
 
+def insertOrUpdateRecord(jsondata, tblName, ModuleId):
     for i in range(len(jsondata)):
         Id = jsondata[i]['Id']
 
-        query ="delete from "+tblName+" where Id='"+str(Id)+"'"
+        query = "delete from " + tblName + " where Id='" + str(Id) + "'"
 
         c.execute(query)
-#	print query
-        query ='insert into '+tblName+'('
+        #	print query
+        query = 'insert into ' + tblName + '('
         cols = ''
         vals = ''
         try:
@@ -23,39 +23,37 @@ def insertOrUpdateRecord(jsondata,tblName,ModuleId):
 
                 try:
                     key = key.encode('UTF-8')
-                except Exception,e:
+                except Exception, e:
                     key = key
 
-                value =jsondata[i][key]
+                value = jsondata[i][key]
 
                 try:
                     value = value.encode('UTF-8')
-                except Exception,e:
+                except Exception, e:
                     value = value
 
                 try:
-                    value = value.replace('"','')
-                except Exception,e:
+                    value = value.replace('"', '')
+                except Exception, e:
                     value = value
 
                 if value is not None:
                     cols = cols + key + ','
-                    vals = vals +'"'+ str(value)+ '",'
-#	    print vals
-            query += cols[:-1] +') values('+vals[:-1]+');'
+                    vals = vals + '"' + str(value) + '",'
+                #	    print vals
+            query += cols[:-1] + ') values(' + vals[:-1] + ');'
             c.execute(query)
 
             if 'Id' in key:
-                print('Record Added/Updated for '+tblName+' :'+str(value))
-	 
-	except Exception,e:
-            print 'Insert Error for ['+ tblName +'] id=' + str(Id) +' details:'+ str(e)
+                print('Record Added/Updated for ' + tblName + ' :' + str(value))
+
+        except Exception, e:
+            print 'Insert Error for [' + tblName + '] id=' + str(Id) + ' details:' + str(e)
             continue
-
-
 
 imgpath = GetCMSData.GetData('SponsorLinking')
 
-insertOrUpdateRecord(imgpath,"SponsorLinking",None)
+insertOrUpdateRecord(imgpath, "SponsorLinking", None)
 
 MoovahLogger.logger.info("SponsorLinking updated successfully")

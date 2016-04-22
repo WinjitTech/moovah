@@ -11,7 +11,9 @@ form = cgi.FieldStorage()
 
 lastSyncDateTime = (form.getvalue('lastSyncDateTime'))
 
-#lastSyncDateTime= "0001-01-01 00:00:00.000" #datetime.datetime.now()
+#lastSyncDateTime= "2016-03-29T09:08:25.763" #datetime.datetime.now()
+
+#UserId = 117511
 
 response ={}
 
@@ -33,8 +35,8 @@ try:
 
     c = db.cursor()
 
-
-    c.execute("select * from Survey where ModifiedDate > '" + (lastSyncDateTime) + "';")
+    c.execute("select Id ,Name ,Tagline ,Description ,SurveyType ,TotalQuestions ,Path ,AdditionalPath ,StartDate ,EndDate ,TimeInHours ,IsGeneral ,Gender ,EducationID ,MaritalStatusID ,NoOfDependents ,SalaryID ,EthnicID ,EmploymentStatusID ,Sponsor ,FileName ,SponsorImage ,SponsorLink ,IsActive ,ModifiedDate ,MinAge ,MaxAge ,IsOpenSurvey ,AvailableLimit ,IsBoxData ,IsGPS ,GPSLocations ,Radius ,Price ,PreferenceID ,LanguageID ,ImagePath,ProvinceID from Survey where ModifiedDate > '" + (lastSyncDateTime) + "' and ( isRingFence=0 or isRingFence is not null);")
+    #c.execute("select * from Survey where UserIds like '%,127520,%' and isRingFence=0 and ModifiedDate > '2016-03-11T12:16:42.717';")
 
 
     results = c.fetchall()

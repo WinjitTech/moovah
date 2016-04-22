@@ -41,7 +41,7 @@ def FillRecords():
         Lattiude=0
         Longitude=0
 
-        a = commands.getoutput("df -k /dev/root")
+        a = commands.getoutput("df -k /dev")
 
         #SDCARD = a[49:58]
         lines = a.split("\n")
@@ -136,6 +136,8 @@ def FillRecords():
             IsInternetWorking = 0
             DeviceErrorDetails = internet_on()
         IsWifiAdapterWorking= 1
+
+	print "OK till InsertMethod"
 
         FillReports.InsertIntoboxstatusinfolog(BoxID,Lattiude,Longitude,
                                                TimeStamp,IsDeviceWorking,SizeOfSDCard,UsedOfSDCard,FreeSpaceOnSDCard,

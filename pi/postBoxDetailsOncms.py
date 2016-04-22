@@ -12,7 +12,7 @@ SizeOfSDCard = a[65:69]
 UsedOfSDCard = a[71:75]
 FreeSpaceOnSDCard = a[77:81]
 PercentUsedOfSDCard = a[83:86]
-MountedPathOfSDCard = a[87]
+MountedPathOfSDCard = a[87:90]
 SDCardCompany = "SonySDCard"
 
 print "SDCardCompany: "+SDCardCompany
@@ -102,7 +102,8 @@ try:
                 'RPISerialNo':str(Serial),'WifiAdapterCompany':str(NameOfWifiAdapter),'SDCardMountedPath':str(MountedPathOfSDCard),
                 'SDCardCompany':str(SDCardCompany),'SDCardSize':str(SizeOfSDCard),'SDCardUsed':str(UsedOfSDCard),
              'PenDriveCompany':str(NameOfPenDrive),
-                'PenDriveMountedPath':str(MountedPathOfPenDrive),'PenDriveSize':str(SizeOfPenDrive),'PenDriveUsed':str(UsedOfPenDrive)
+                'PenDriveMountedPath':str(MountedPathOfPenDrive),'PenDriveSize':str(SizeOfPenDrive),'PenDriveUsed':str(UsedOfPenDrive),
+                'BoxType':2
                 }
 
     req = urllib2.Request(url)
